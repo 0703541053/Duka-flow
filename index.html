@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7f4">
+    <title>DukaFlow — Orders & stock, in sync</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="DukaFlow home">
+          <span class="brand-mark">D</span>
+          <span>Duka<span class="brand-light">Flow</span></span>
+        </a>
+        <p class="side-label">WORKSPACE</p>
+        <nav class="side-nav" aria-label="Main navigation">
+          <button class="nav-link active" data-view="overview"><span class="nav-icon">⌂</span> Overview</button>
+          <button class="nav-link" data-view="orders"><span class="nav-icon">▤</span> Orders <span class="nav-count" id="nav-order-count">0</span></button>
+          <button class="nav-link" data-view="products"><span class="nav-icon">▦</span> Products</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="shop-card">
+            <div class="shop-avatar">MK</div>
+            <div><strong>Mtaa Store</strong><small>Owner account</small></div>
+            <span class="more">···</span>
+          </div>
+          <p class="sidebar-note">A calmer way to run your shop.</p>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Workspace</span><span class="crumb-divider">/</span><strong id="page-crumb">Overview</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label" id="today-label"></span>
+            <button class="avatar-button" aria-label="Account menu">MK</button>
+          </div>
+        </header>
+
+        <section class="page-section active" id="overview-view">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">YOUR SHOP AT A GLANCE</p>
+              <h1>Good morning, Mtaa Store <span class="wave">✦</span></h1>
+              <p class="subheading">Here’s what’s happening with your business today.</p>
+            </div>
+            <button class="button button-primary" data-open-modal="order-modal"><span class="plus">+</span> Create order</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top"><span>Sales this month</span><span class="stat-icon green-icon">↗</span></div>
+              <strong class="stat-value" id="sales-total">KES 0</strong>
+              <span class="stat-caption"><span class="caption-dot"></span> From paid & completed orders</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Open orders</span><span class="stat-icon peach-icon">↗</span></div>
+              <strong class="stat-value" id="open-order-total">0</strong>
+              <span class="stat-caption">Need your attention</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Products in stock</span><span class="stat-icon blue-icon">▦</span></div>
+              <strong class="stat-value" id="product-total">0</strong>
+              <span class="stat-caption">Across your catalogue</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Running low</span><span class="stat-icon red-icon">!</span></div>
+              <strong class="stat-value" id="low-stock-total">0</strong>
+              <span class="stat-caption">Products at 5 items or less</span>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel orders-panel">
+              <div class="panel-heading">
+                <div><h2>Recent orders</h2><p>Your latest customer requests</p></div>
+                <button class="text-button" data-navigate="orders">View all <span>→</span></button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>ORDER</th><th>CUSTOMER</th><th>ITEM</th><th>TOTAL</th><th>STATUS</th></tr></thead>
+                  <tbody id="recent-orders"></tbody>
+                </table>
+              </div>
+              <div class="empty-state hidden" id="empty-recent-orders">
+                <span class="empty-icon">▤</span><strong>No orders yet</strong>
+                <p>Create your first order to start tracking sales.</p>
+                <button class="button button-secondary" data-open-modal="order-modal">Create an order</button>
+              </div>
+            </section>
+
+            <section class="panel inventory-panel">
+              <div class="panel-heading">
+                <div><h2>Stock watch</h2><p>Products that need a restock</p></div>
+                <button class="text-button" data-navigate="products">Manage stock <span>→</span></button>
+              </div>
+              <div class="stock-list" id="stock-watch"></div>
+              <div class="empty-state compact-empty hidden" id="empty-stock">
+                <span class="empty-icon">✓</span><strong>You’re well stocked</strong>
+                <p>No products are running low right now.</p>
+              </div>
+            </section>
+          </div>
+          <p class="prototype-note"><span>i</span> Your data is saved in this browser on this device. This prototype does not sync across devices.</p>
+        </section>
+
+        <section class="page-section hidden" id="orders-view">
+          <div class="welcome-row">
+            <div><p class="eyebrow">CUSTOMER ACTIVITY</p><h1>Orders</h1><p class="subheading">Track every order from request to handoff.</p></div>
+            <button class="button button-primary" data-open-modal="order-modal"><span class="plus">+</span> Create order</button>
+          </div>
+          <section class="panel full-panel">
+            <div class="panel-heading list-heading"><div><h2>All orders</h2><p id="all-order-caption">0 orders</p></div><input class="search-input" id="order-search" type="search" placeholder="Search orders or customers" aria-label="Search orders or customers"></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ORDER</th><th>CUSTOMER</th><th>ITEM</th><th>DATE</th><th>TOTAL</th><th>STATUS</th><th></th></tr></thead>
+                <tbody id="all-orders"></tbody>
+              </table>
+            </div>
+            <div class="empty-state hidden" id="empty-all-orders"><span class="empty-icon">▤</span><strong>No matching orders</strong><p>Try a different search or create a new order.</p></div>
+          </section>
+        </section>
+
+        <section class="page-section hidden" id="products-view">
+          <div class="welcome-row">
+            <div><p class="eyebrow">YOUR CATALOGUE</p><h1>Products</h1><p class="subheading">Keep your stock and prices up to date.</p></div>
+            <button class="button button-primary" data-open-modal="product-modal"><span class="plus">+</span> Add product</button>
+          </div>
+          <section class="panel full-panel">
+            <div class="panel-heading list-heading"><div><h2>Product list</h2><p id="product-caption">0 products</p></div><input class="search-input" id="product-search" type="search" placeholder="Search products" aria-label="Search products"></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>PRICE</th><th>IN STOCK</th><th>STOCK LEVEL</th><th>RESTOCK</th></tr></thead>
+                <tbody id="all-products"></tbody>
+              </table>
+            </div>
+            <div class="empty-state hidden" id="empty-products"><span class="empty-icon">▦</span><strong>No products found</strong><p>Add a product or try a different search.</p></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="app-modal" id="order-modal">
+      <form class="modal-form" id="order-form">
+        <div class="modal-heading"><div><p class="eyebrow">NEW SALE</p><h2>Create an order</h2></div><button type="button" class="close-button" data-close-modal aria-label="Close">×</button></div>
+        <label>Customer name<input name="customer" required maxlength="70" placeholder="e.g. Amina Wanjiku"></label>
+        <label>WhatsApp number <span class="optional">(optional)</span><input name="phone" inputmode="tel" maxlength="20" placeholder="e.g. 0712 345 678"></label>
+        <div class="form-row">
+          <label class="grow">Product<select name="product" id="order-product" required></select></label>
+          <label class="quantity-field">Qty<input name="quantity" type="number" min="1" value="1" required></label>
+        </div>
+        <label>Order status<select name="status"><option>Pending</option><option>Paid</option><option>Ready</option><option>Completed</option></select></label>
+        <p class="form-error hidden" id="order-error" role="alert"></p>
+        <div class="modal-actions"><button type="button" class="button button-secondary" data-close-modal>Cancel</button><button class="button button-primary" type="submit">Save order</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-modal" id="product-modal">
+      <form class="modal-form" id="product-form">
+        <div class="modal-heading"><div><p class="eyebrow">YOUR CATALOGUE</p><h2>Add a product</h2></div><button type="button" class="close-button" data-close-modal aria-label="Close">×</button></div>
+        <label>Product name<input name="name" required maxlength="70" placeholder="e.g. Everyday Tote Bag"></label>
+        <label>Category<input name="category" required maxlength="40" placeholder="e.g. Accessories"></label>
+        <div class="form-row">
+          <label class="grow">Price (KES)<input name="price" type="number" min="1" step="1" required placeholder="850"></label>
+          <label class="grow">Starting stock<input name="stock" type="number" min="0" step="1" required placeholder="12"></label>
+        </div>
+        <p class="form-error hidden" id="product-error" role="alert"></p>
+        <div class="modal-actions"><button type="button" class="button button-secondary" data-close-modal>Cancel</button><button class="button button-primary" type="submit">Add product</button></div>
+      </form>
+    </dialog>
+
+    <div class="toast hidden" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
